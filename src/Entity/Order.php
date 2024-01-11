@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\ValueObject\OrderPrices;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,13 +19,18 @@ class Order
     #[ORM\Column]
     public int $id;
 
-    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class)]
-    public Collection $items;
+    #[ORM\Embedded(class: OrderPrices::class, columnPrefix: false)]
+    public OrderPrices $prices;
 
     public function __construct()
     {
+        $this->prices = new OrderPrices();
         $this->items = new ArrayCollection();
     }
+
+    /** @var Collection<OrderItem> $items */
+    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class)]
+    public Collection $items;
 
     public function getId(): int
     {

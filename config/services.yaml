@@ -22,3 +22,18 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # OrderPricesCalculator
+    NetPriceCalculator:
+        class: App\Service\OrderPricesCalculator\NetPriceCalculator
+    VatPriceCalculator:
+        class: App\Service\OrderPricesCalculator\VatCalculator
+    GrossPriceCalculator:
+        class: App\Service\OrderPricesCalculator\GrossPriceCalculator
+    App\Service\OrderPricesCalculator\Aggregator:
+        class: App\Service\OrderPricesCalculator\Aggregator
+        arguments:
+            - '@NetPriceCalculator'
+            - '@VatPriceCalculator'
+            - '@GrossPriceCalculator'
+    # End OrderPricesCalculator
